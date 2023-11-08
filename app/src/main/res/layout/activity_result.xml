@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvResultTitle"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="@dimen/ui_margin_8dp"
+        android:gravity="center"
+        android:text="@string/result"
+        android:background="#f2f2f2" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvResultTitle"
+        app:layout_constraintBottom_toTopOf="@+id/btBack">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/ui_margin_16dp">
+
+            <TextView
+                android:id="@+id/tvResultStatusLabel"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/order_status_label" />
+            <TextView
+                android:id="@+id/tvResultStatus"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toTopOf="@+id/tvResultStatusLabel"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvResultOrderNumberLabel"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toBottomOf="@+id/tvResultStatusLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/order_number_label" />
+            <TextView
+                android:id="@+id/tvResultOrderNumber"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toTopOf="@+id/tvResultOrderNumberLabel"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvResultOrderAmountLabel"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toBottomOf="@+id/tvResultOrderNumberLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/order_amount_label" />
+            <TextView
+                android:id="@+id/tvResultOrderAmount"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toTopOf="@+id/tvResultOrderAmountLabel"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvResultOrderCommentLabel"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toBottomOf="@+id/tvResultOrderAmountLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/order_comment_label" />
+            <TextView
+                android:id="@+id/tvResultOrderComment"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toTopOf="@+id/tvResultOrderCommentLabel"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvResultExtInfoLabel"
+                style="@style/TextViewResult"
+                app:layout_constraintTop_toBottomOf="@+id/tvResultOrderCommentLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/ext_info_label" />
+
+            <TextView
+                android:id="@+id/tvResultExtInfo"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintTop_toTopOf="@+id/tvResultExtInfoLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvResultExtInfoLabel"
+                android:gravity="end"
+                android:lines="4"
+                android:maxLines="4"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/btRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btBack"
+        android:layout_marginLeft="@dimen/ui_margin_10dp"
+        android:layout_marginRight="@dimen/ui_margin_10dp"
+        android:text="@string/refresh_btn_text"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="@dimen/ui_margin_10dp"
+        android:layout_marginRight="@dimen/ui_margin_10dp"
+        android:text="@string/back_btn_text" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleLarge"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

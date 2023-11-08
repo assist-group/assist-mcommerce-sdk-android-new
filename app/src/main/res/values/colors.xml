@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#52b253</color>
+    <color name="colorPrimaryDark">#386140</color>
+    <color name="colorAccent">#67c85f</color>
+    <color name="colorHint">#bbb</color>
+    <color name="colorDark">#1f1f2e</color>
+
+    <color name="order_approved">#8AE18A</color>
+    <color name="order_in_process">#ffdce158</color>
+    <color name="order_unknown">#E18A8A</color>
+    <color name="order_napproved">#777777</color>
+    <color name="order_cancel_error">#FF0000</color>
+</resources>
