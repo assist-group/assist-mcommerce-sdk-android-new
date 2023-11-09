@@ -281,7 +281,6 @@ class MainActivity : BaseActivity() {
         Configuration(
             apiURL = urls[binding.spURL.selectedItemPosition],
             link = binding.etLink.text.toString(),
-            useCamera = binding.cbUseCamera.isChecked
         )
 
     private fun goToStorage() {
