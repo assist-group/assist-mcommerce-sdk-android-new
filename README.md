@@ -255,7 +255,9 @@ maven { url 'https://jitpack.io' }
 }
 ```
 In the application level build.gradle, add the dependency, specifying the latest available SDK version:
+
 [![](https://jitpack.io/v/assist-group/assist-mcommerce-sdk-android-new.svg)](https://jitpack.io/#assist-group/assist-mcommerce-sdk-android-new)
+
 ```
 implementation 'com.github.assist-group:assist-mcommerce-sdk-android-new:latest-release'
 ```
