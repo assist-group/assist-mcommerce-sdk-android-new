@@ -1,11 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        sdk_version_code = 10
-        sdk_version_name = '2.1.0'
+        sdk_version_code = 11
+        sdk_version_name = '2.1.1'
         retrofitVersion = '2.9.0'
         okHttp3Version = '5.0.0-alpha.11'
-        dagger2Version = '2.46.1'
+        dagger2Version = '2.51.1'
         roomVersion = '2.5.2'
     }
     dependencies {
