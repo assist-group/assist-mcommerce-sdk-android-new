@@ -72,7 +72,7 @@ sdk.payWeb(context, data, scanner, ::processResult)
 ```
 - **context** - контекст текущей activity или приложения;
 - **data** - объект [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt),
-минимальный набор полей для оплаты: merchantID, login, password, orderNumber, orderAmount;
+минимальный набор полей для оплаты: merchantID, orderNumber, orderAmount;
 полный набор в [документации](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
 - **scanner** - объект [CardScanner](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/scanner/CardScanner.kt);
 если он не null, то при запуске WebView сразу откроется сканер карт;
@@ -91,7 +91,7 @@ sdk.payToken(context, data, token, type, ::processResult)
 ```
 - **context** - контекст текущей activity или приложения;
 - **data** - объект [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt),
-минимальный набор полей для оплаты: merchantID, login, password, orderNumber, orderAmount;
+минимальный набор полей для оплаты: merchantID, orderNumber, orderAmount;
 полный набор в [документации](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
 - **token** - платёжный токен GooglePay, SamsungPay или MirPay;
 - **type** - объект [PaymentTokenType](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/models/PaymentTokenType.kt),
@@ -133,7 +133,7 @@ sdk.declineByNumber(context, data, ::processResult)
 ```
 - **context** - контекст текущей activity или приложения;
 - **data** - объект [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt),
-минимальный набор полей для отказа: merchantID, login, password, orderNumber;
+минимальный набор полей для отказа: merchantID, orderNumber;
 - **::processResult** - метод приложения processResult(result: AssistResult), в который приходит результат платежа.
 
 Если заказ создан, но по какой-то причине необходимо прервать оплату, то методом **declineByNumber** его можно завершить принудительно.
@@ -300,7 +300,7 @@ sdk.deleteOrderInStorage(order) // Removing an order from the order log
 sdk.payWeb(context, data, scanner, ::processResult)
 ```
 - **context** - context of the current activity or application;
-- **data** - the object [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt), minimum set of fields for payment: merchantID, login, password, orderNumber, orderAmount; full set of fields for payment see in [the documentation](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
+- **data** - the object [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt), minimum set of fields for payment: merchantID, orderNumber, orderAmount; full set of fields for payment see in [the documentation](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
 - **scanner** - the object [CardScanner](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/scanner/CardScanner.kt); if it is not null, then by the WebView start, the map scanner will immediately open;
 - **::processResult** - application method processResult(result: AssistResult), which receives the payment result.
 
@@ -316,7 +316,7 @@ startActivityForResult(intent, assistRequestCode)
 sdk.payToken(context, data, token, type, ::processResult)
 ```
 - **context** - context of the current activity or application;
-- **data** - the object [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt), minimum set of fields for payment: merchantID, login, password, orderNumber, orderAmount; full set of fields for payment see in [the documentation](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
+- **data** - the object [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt), minimum set of fields for payment: merchantID, orderNumber, orderAmount; full set of fields for payment see in [the documentation](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
 - **token** - payment token GooglePay, SamsungPay or MirPay;
 - **type** - the object [PaymentTokenType](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/models/PaymentTokenType.kt) indicating whose token it is - GooglePay, SamsungPay or MirPay;
 - **::processResult** - application method processResult(result: AssistResult), which receives the payment result.
@@ -353,7 +353,7 @@ Must be specified in the [AssistPaymentData](https://github.com/assist-group/ass
 sdk.declineByNumber(context, data, ::processResult)
 ```
 - **context** - context of the current activity or application;
-- **data** - the object [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt), minimum set of fields for payment: merchantID, login, password, orderNumber, orderAmount;
+- **data** - the object [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt), minimum set of fields for payment: merchantID, orderNumber, orderAmount;
 - **::processResult** - application method processResult(result: AssistResult), which receives the payment result.
  
 If an order has been created, but for some reason it is necessary to interrupt payment, then it can be completed forcibly using the **declineByNumber** method.
