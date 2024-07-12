@@ -133,7 +133,7 @@ sdk.declineByNumber(context, data, ::processResult)
 ```
 - **context** - контекст текущей activity или приложения;
 - **data** - объект [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt),
-минимальный набор полей для отказа: merchantID, orderNumber;
+минимальный набор полей для отказа: merchantID, orderNumber, orderAmount;
 - **::processResult** - метод приложения processResult(result: AssistResult), в который приходит результат платежа.
 
 Если заказ создан, но по какой-то причине необходимо прервать оплату, то методом **declineByNumber** его можно завершить принудительно.
