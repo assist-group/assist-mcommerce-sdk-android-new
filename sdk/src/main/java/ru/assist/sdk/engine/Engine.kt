@@ -65,7 +65,8 @@ internal object Engine {
         context: AppCompatActivity,
         data: AssistPaymentData,
         scanner: CardScanner?,
-        result: (AssistResult) -> Unit
+        result: (AssistResult) -> Unit,
+        allowRedirect: Boolean
     ) =
         checkRegistration(
             context,
@@ -86,16 +87,14 @@ internal object Engine {
                     data.applicationName = instInfo.appName()
                     data.applicationVersion = instInfo.versionName()
                     data.assistSDKVersion = AssistSDK.sdkVersion
-                    data.urlReturnOk = "http://succeed_payment.url/"
-                    data.urlReturnNo = "http://declined_payment.url/"
 
                     val url = "${configuration.apiURL}/pay/order.cfm"
                     val content = mapToWebPay(data, instInfo.getAppRegId())
                     webProcessor =
-                        WebProcessor(context, url, content, scanner, request, ::getOrderResult, result)
+                        WebProcessor(context, url, content, scanner, request, ::getOrderResult, result, allowRedirect)
                 } else {
                     webProcessor =
-                        WebProcessor(context, checkLink(link), "", scanner, request, ::getOrderResult, result)
+                        WebProcessor(context, checkLink(link), "", scanner, request, ::getOrderResult, result, allowRedirect)
                 }
             }
         )
@@ -425,7 +424,7 @@ internal object Engine {
             assistSDKVersion=${urlEncode(data.assistSDKVersion)}&
             urlReturnOk=${urlEncode(data.urlReturnOk)}&
             urlReturnNo=${urlEncode(data.urlReturnNo)}
-        """.replace("[\\s\\n\\t]".toRegex(), "")
+        """.replace("[\\s\\n\\t]".toRegex(), "").replace("[^=&]+=&".toRegex(), "")
     }
 
     private fun urlEncode(param: String?): String =

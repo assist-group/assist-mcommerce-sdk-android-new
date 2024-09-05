@@ -75,7 +75,7 @@ tasks.named("detekt").configure {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar","*.aar"])
     implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.3'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.5'
     implementation project(path: ':sdk')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.12.0'
@@ -89,7 +89,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:21.2.0'
     implementation 'com.google.android.gms:play-services-wallet:19.4.0'
 
-    implementation 'com.roxiemobile.android:android-commons:0.9.1'
     implementation 'com.nimbusds:nimbus-jose-jwt:9.30.1'
     implementation 'org.bitbucket.b_c:jose4j:0.9.6'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'

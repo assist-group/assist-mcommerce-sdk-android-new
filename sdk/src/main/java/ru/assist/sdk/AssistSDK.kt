@@ -57,18 +57,21 @@ class AssistSDK {
         context: AppCompatActivity,
         data: AssistPaymentData,
         scanner: CardScanner?,
-        result: (AssistResult) -> Unit
-    ) = engine.payWeb(context, data, scanner, result)
+        result: (AssistResult) -> Unit,
+        allowRedirect: Boolean = false
+    ) = engine.payWeb(context, data, scanner, result, allowRedirect)
 
     fun createPayWebIntent(
         context: AppCompatActivity,
         data: AssistPaymentData,
-        scanner: CardScanner?
+        scanner: CardScanner?,
+        allowRedirect: Boolean = false
     ) =
         Intent(context, PayActivity::class.java)
             .putExtra(PayActivity.EXTRA_ACTION, PayActivity.EXTRA_ACTION_PAY_WEB)
             .putExtra(PayActivity.EXTRA_PAYMENT_DATA, data)
             .putExtra(PayActivity.EXTRA_SCANNER, scanner)
+            .putExtra(PayActivity.EXTRA_ALLOW_REDIRECT, allowRedirect)
 
     fun payToken(
         context: AppCompatActivity,

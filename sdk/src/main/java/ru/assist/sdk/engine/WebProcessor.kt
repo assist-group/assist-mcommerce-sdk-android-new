@@ -29,7 +29,8 @@ internal class WebProcessor(
     private val scanner: CardScanner?,
     private val request: ResultRequest,
     private val rr: (AppCompatActivity, ResultRequest, (AssistResult) -> Unit) -> Unit,
-    private val result: (AssistResult) -> Unit
+    private val result: (AssistResult) -> Unit,
+    private val allowRedirect: Boolean
 ) {
     @Inject
     lateinit var api: AssistApi
@@ -44,12 +45,16 @@ internal class WebProcessor(
     }
 
     fun getDataFromResult(url: String) {
-        val call = AddressCall(
-            action = { json ->
-                rr(context, fillRequestDataByJson(json), result)
-            }
-        )
-        api.getAddress(url).enqueue(call)
+        if (allowRedirect) {
+            api.getAddress(url).enqueue(ExternalAddressCall())
+        } else {
+            val call = AddressCall(
+                action = { json ->
+                    rr(context, fillRequestDataByJson(json), result)
+                }
+            )
+            api.getAddress(url).enqueue(call)
+        }
     }
 
     fun getDataFromError(url: String) {
@@ -101,6 +106,23 @@ internal class WebProcessor(
             val stream = ByteArrayInputStream(response.body()?.bytes())
             val html = BufferedReader(InputStreamReader(stream)).readText()
             action(html)
+        }
+
+        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            result(AssistResult(t.message))
+        }
+    }
+
+    inner class ExternalAddressCall : Callback<ResponseBody> {
+        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            val orderNumber = response.raw().request.url.queryParameter("ordernumber")
+            val req = request.apply {
+                setOrderNumber(orderNumber)
+                setDate(
+                    SimpleDateFormat("dd.MM.yyyy", Locale.US).format(System.currentTimeMillis())
+                )
+            }
+            rr(context, req, result)
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {

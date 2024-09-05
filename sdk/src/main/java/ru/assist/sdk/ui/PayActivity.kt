@@ -21,6 +21,7 @@ class PayActivity: AppCompatActivity() {
         const val EXTRA_ACTION_DECLINE = "ru.assist.sdk.decline"
         const val EXTRA_PAYMENT_DATA = "ru.assist.sdk.paymentdata"
         const val EXTRA_SCANNER = "ru.assist.sdk.scanner"
+        const val EXTRA_ALLOW_REDIRECT = "ru.assist.sdk.allowredirect"
         const val EXTRA_PAYMENT_TOKEN = "ru.assist.sdk.paymenttoken"
         const val EXTRA_TOKEN_TYPE = "ru.assist.sdk.tokentype"
         const val EXTRA_ASSIST_RESULT = "ru.assist.sdk.result"
@@ -55,8 +56,9 @@ class PayActivity: AppCompatActivity() {
     private fun payWeb(bundle: Bundle) {
         val data = bundle.getParcelable<AssistPaymentData>(EXTRA_PAYMENT_DATA)
         val scanner = bundle.getParcelable<CardScanner>(EXTRA_SCANNER)
+        val allowRedirect = bundle.getBoolean(EXTRA_ALLOW_REDIRECT)
         if (data != null) {
-            engine.payWeb(this, data, scanner, ::processResult)
+            engine.payWeb(this, data, scanner, ::processResult, allowRedirect)
         } else {
             errorResult("PayWeb empty data")
         }
