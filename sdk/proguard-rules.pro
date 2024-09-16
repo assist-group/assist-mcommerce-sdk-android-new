@@ -45,6 +45,17 @@
 -dontwarn com.google.gson.internal.**
 -dontnote com.google.gson.internal.**
 
+# org.simpleframework.xml
+-dontwarn javax.xml.stream.**
+-keep public class org.simpleframework.** { *; }
+-keep class org.simpleframework.xml.** { *; }
+-keep class org.simpleframework.xml.core.** { *; }
+-keep class org.simpleframework.xml.util.** { *; }
+-keepattributes ElementList, Root
+-keepclassmembers class * {
+    @org.simpleframework.xml.* *;
+}
+
 # ru.assist.sdk
 -keep class ru.assist.sdk.** { *; }
 -dontwarn ru.assist.sdk.**
