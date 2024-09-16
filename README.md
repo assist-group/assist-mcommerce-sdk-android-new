@@ -56,7 +56,7 @@ val sdk = AssistSDK.getInstance().configure(context, config)
 ```
 Методы, доступные в Assist SDK:
 ```kotlin
-sdk.payWeb(context, data, scanner, ::processResult) // Оплата через WebView
+sdk.payWeb(context, data, scanner, allowRedirect, ::processResult) // Оплата через WebView
 sdk.payToken(context, data, token, type, ::processResult) // Оплата токеном GooglePay, SamsungPay или MirPay
 sdk.declineByNumber(context, data, ::processResult) // Отказ от заказа (прерывание оплаты)
 sdk.getOrderDataByNumber(context, order, ::processResult) // Получение данных заказа по номеру заказа
@@ -68,19 +68,22 @@ sdk.deleteOrderInStorage(order) // Удаление заказа из журна
 ### Оплата через WebView
 
 ```kotlin
-sdk.payWeb(context, data, scanner, ::processResult)
+sdk.payWeb(context, data, scanner, ::processResult, allowRedirect)
 ```
 - **context** - контекст текущей activity или приложения;
 - **data** - объект [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt),
 минимальный набор полей для оплаты: merchantID, orderNumber, orderAmount;
 полный набор в [документации](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
-- **scanner** - объект [CardScanner](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/scanner/CardScanner.kt);
+- **scanner** - объект [CardScanner](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/scanner/CardScanner.kt) (необязательный, default=null);
 если он не null, то при запуске WebView сразу откроется сканер карт;
-- **::processResult** - метод приложения processResult(result: AssistResult), в который приходит результат платежа.
+- **allowRedirect** - флаг, будет ли вызван внешний сервис по окончанию платежа (необязательный, default=false).
+Если у вас включён редирект после окончания платежа, то необходимо передавать allowRedirect=true.
+Визуально в webView редиректа не будет, результат платежа по-прежнему вернётся объектом AssistResult.
+- **::processResult** - метод приложения processResult(result: AssistResult), в который приходит результат платежа;
 
 Данный метод имеет Intent-версию (про Intent-сценарий подробнее будет ниже):
 ```kotlin
-val intent = sdk.createPayWebIntent(context, data, scanner)
+val intent = sdk.createPayWebIntent(context, data, scanner, allowRedirect)
 startActivityForResult(intent, assistRequestCode)
 ```
 
@@ -149,7 +152,7 @@ startActivityForResult(intent, assistRequestCode)
 Если вам удобнее получать результат платежа в **onActivityResult**, то необходимо вызывать специальные методы оплаты.
 Например, вместо **payWeb** необходимо использовать:
 ```kotlin
-val intent = sdk.createPayWebIntent(context, data, scanner)
+val intent = sdk.createPayWebIntent(context, data, scanner, allowRedirect)
 startActivityForResult(intent, assistRequestCode) // или registerForActivityResult
   //
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -285,7 +288,7 @@ val sdk = AssistSDK.getInstance().configure(context, config)
 ```
 Methods available in Assist SDK:
 ```kotlin
-sdk.payWeb(context, data, scanner, ::processResult) // Payment via WebView
+sdk.payWeb(context, data, scanner, allowRedirect, ::processResult) // Payment via WebView
 sdk.payToken(context, data, token, type, ::processResult) // Payment with Google Pay, Samsung Pay or MirPay token
 sdk.declineByNumber(context, data, ::processResult) // Order cancellation (interruption of payment)
 sdk.getOrderDataByNumber(context, order, ::processResult) // Receiving order data by order number
@@ -297,16 +300,19 @@ sdk.deleteOrderInStorage(order) // Removing an order from the order log
 ### Payment via WebView
 
 ```kotlin
-sdk.payWeb(context, data, scanner, ::processResult)
+sdk.payWeb(context, data, scanner, allowRedirect, ::processResult)
 ```
 - **context** - context of the current activity or application;
 - **data** - the object [AssistPaymentData](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/api/models/AssistPaymentData.kt), minimum set of fields for payment: merchantID, orderNumber, orderAmount; full set of fields for payment see in [the documentation](https://docs.assist.ru/pages/viewpage.action?pageId=5767488);
-- **scanner** - the object [CardScanner](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/scanner/CardScanner.kt); if it is not null, then by the WebView start, the map scanner will immediately open;
+- **scanner** - the object [CardScanner](https://github.com/assist-group/assist-mcommerce-sdk-android-new/blob/main/sdk/src/main/java/ru/assist/sdk/scanner/CardScanner.kt) (not required, default=null); if it is not null, then by the WebView start, the map scanner will immediately open;
+- **allowRedirect** - the flag whether the external service will be called after the payment is completed (not required, default=false).
+If you have enabled redirect after the end of the payment, you should pass allowRedirect=true.
+Visually in the webView there will be no redirect, the payment result will still be returned by the AssistResult object.
 - **::processResult** - application method processResult(result: AssistResult), which receives the payment result.
 
 This method has an Intent version (the Intent-scenario is described detailed below):
 ```kotlin
-val intent = sdk.createPayWebIntent(context, data, scanner)
+val intent = sdk.createPayWebIntent(context, data, scanner, allowRedirect)
 startActivityForResult(intent, assistRequestCode)
 ```
 
@@ -369,7 +375,7 @@ startActivityForResult(intent, assistRequestCode)
 If it is more convenient for you to receive the payment result in **onActivityResult**,
 then you need to call special payment methods. For example, instead of **payWeb** you need to use:
 ```kotlin
-val intent = sdk.createPayWebIntent(context, data, scanner)
+val intent = sdk.createPayWebIntent(context, data, scanner, allowRedirect)
 startActivityForResult(intent, assistRequestCode) // or registerForActivityResult
   //
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

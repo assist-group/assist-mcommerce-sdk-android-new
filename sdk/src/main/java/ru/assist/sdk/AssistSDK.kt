@@ -56,9 +56,29 @@ class AssistSDK {
     fun payWeb(
         context: AppCompatActivity,
         data: AssistPaymentData,
+        result: (AssistResult) -> Unit
+    ) = engine.payWeb(context, data, null, result, false)
+
+    fun payWeb(
+        context: AppCompatActivity,
+        data: AssistPaymentData,
+        allowRedirect: Boolean = false,
+        result: (AssistResult) -> Unit
+    ) = engine.payWeb(context, data, null, result, allowRedirect)
+
+    fun payWeb(
+        context: AppCompatActivity,
+        data: AssistPaymentData,
         scanner: CardScanner?,
-        result: (AssistResult) -> Unit,
-        allowRedirect: Boolean = false
+        result: (AssistResult) -> Unit
+    ) = engine.payWeb(context, data, scanner, result, false)
+
+    fun payWeb(
+        context: AppCompatActivity,
+        data: AssistPaymentData,
+        scanner: CardScanner?,
+        allowRedirect: Boolean = false,
+        result: (AssistResult) -> Unit
     ) = engine.payWeb(context, data, scanner, result, allowRedirect)
 
     fun createPayWebIntent(
