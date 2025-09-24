@@ -15,16 +15,18 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.Optional
 
-class GooglePay(context: Activity, isReady: (Boolean) -> Unit) {
+class GooglePay(
+    context: Activity,
+    env: Int,
+    googlePayMerchantId: String,
+    isReady: (Boolean) -> Unit
+) {
     companion object {
         private const val TAG = "GooglePay"
 
-        // Test
-        private const val googlePayMerchantId = "02510116604241796260"
-        // Prod
-        //private const val googlePayMerchantId = "16590966430175452581"
-
         private const val googlePayGateway = "assist"
+        var env: Int? = null
+        var googlePayMerchantId: String? = null
 
         /**
          * Create a Google Pay API base request object with properties used in all requests
@@ -136,9 +138,12 @@ class GooglePay(context: Activity, isReady: (Boolean) -> Unit) {
          */
         @Throws(JSONException::class)
         private fun getMerchantInfo(merchantName: String): JSONObject =
-            JSONObject()
-                .put("merchantId", googlePayMerchantId)
-                .put("merchantName", merchantName)
+            JSONObject().apply {
+                if (env == WalletConstants.ENVIRONMENT_PRODUCTION && !googlePayMerchantId.isNullOrBlank()) {
+                    put("merchantId", googlePayMerchantId)
+                }
+                put("merchantName", merchantName)
+            }
 
         /**
          * An object describing accepted forms of payment by your app, used to determine a viewer's
@@ -186,10 +191,13 @@ class GooglePay(context: Activity, isReady: (Boolean) -> Unit) {
     private val paymentsClient: PaymentsClient
 
     init {
+        GooglePay.env = env
+        GooglePay.googlePayMerchantId = googlePayMerchantId
+
         paymentsClient = Wallet.getPaymentsClient(
             context,
             Wallet.WalletOptions.Builder()
-                .setEnvironment(WalletConstants.ENVIRONMENT_TEST) //WalletConstants.ENVIRONMENT_PRODUCTION
+                .setEnvironment(env)
                 .build()
         )
 

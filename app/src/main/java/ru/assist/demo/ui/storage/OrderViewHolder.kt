@@ -24,8 +24,10 @@ class OrderViewHolder(
     private val tvOrderNumber: TextView = itemView.findViewById(R.id.tvOrderNumber)
 
     fun bind(model: AssistResult) {
-        tvOrderTime.text =
-            SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.US).format(model.result?.dateMillis)
+        val millis = model.result?.dateMillis
+        tvOrderTime.text = if (millis != null)
+            SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.US).format(millis)
+        else "-"
         tvTotal.text = model.result?.amount
         tvCurrency.text = model.result?.currency
         tvOrderNumber.text = model.result?.orderNumber

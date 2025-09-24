@@ -13,8 +13,10 @@ import android.view.WindowManager
 import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ru.assist.sdk.AssistSDK
 import ru.assist.sdk.BuildConfig
@@ -53,17 +55,20 @@ internal class WebViewActivity: AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initUI() {
         webView = binding.webView
-        webView.let {
-            it.settings.javaScriptEnabled = true
-            it.settings.loadsImagesAutomatically = true
-            it.settings.useWideViewPort = false
-            it.settings.loadWithOverviewMode = true
-            it.settings.builtInZoomControls = true
-            it.settings.displayZoomControls = false
-            it.webViewClient = PayWebViewClient()
-            it.webChromeClient = PayWebChromeClient()
-            postRequest()
+        webView.apply {
+            settings.javaScriptEnabled = true
+            settings.loadsImagesAutomatically = true
+            settings.useWideViewPort = false
+            settings.loadWithOverviewMode = true
+            settings.builtInZoomControls = true
+            settings.displayZoomControls = false
+            settings.allowFileAccess = false
+            settings.allowContentAccess = false
+            settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+            webViewClient = PayWebViewClient()
+            webChromeClient = PayWebChromeClient()
         }
+        postRequest()
     }
 
     override fun onBackPressed() =
@@ -76,11 +81,11 @@ internal class WebViewActivity: AppCompatActivity() {
         intent.extras?.let {
             val url = it.getString("url", null)
             val content = it.getString("content", null)
-            if (content.isBlank()) {
+            if (content.isNullOrBlank()) {
                 Log.d(tag, "Load $url")
                 webView.loadUrl(url) // Переходим по ссылке существующего платежа
             } else {
-                Log.d(tag, "Post to $url content: $content")
+                Log.d(tag, "Post to $url content: ${content.take(512)}...")
                 webView.postUrl(url, content.toByteArray()) // Создание нового заказа
             }
         }
@@ -171,6 +176,8 @@ internal class WebViewActivity: AppCompatActivity() {
     inner class PayWebViewClient : WebViewClient() {
         override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
             Log.e(tag, "SSL Error: $error")
+            handler.cancel()
+            Toast.makeText(this@WebViewActivity, R.string.ssl_error, Toast.LENGTH_LONG).show()
         }
 
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean =

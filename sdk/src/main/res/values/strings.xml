@@ -4,4 +4,5 @@
     <string name="dlg_title_warning">Внимание</string>
     <string name="dlg_msg_stop_payment_question">Остановить платёж?</string>
     <string name="loading">Загрузка…</string>
+    <string name="ssl_error">Ошибка SSL</string>
 </resources>

@@ -26,9 +26,14 @@
         </activity>
         <activity
             android:name="ru.assist.sdk.ui.WebViewActivity"
+            android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".ui.ResultActivity" />
-        <activity android:name=".ui.storage.StorageActivity" />
+        <activity
+            android:name=".ui.ResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.storage.StorageActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.version"

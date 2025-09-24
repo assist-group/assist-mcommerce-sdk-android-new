@@ -69,6 +69,7 @@
                 android:id="@+id/etPassword"
                 style="@style/EditText"
                 android:hint="@string/password_hint"
+                android:inputType="textPassword"
                 android:autofillHints="password" />
 
             <TextView

@@ -33,30 +33,33 @@ internal class RetrofitCallBack<T> {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    successAction?.let {
-                        it(response.body()!!)
+                    val body = response.body()
+                    if (body != null) {
+                        successAction?.invoke(body)
+                    } else {
+                        errorAction?.invoke(ERROR)
                     }
                 } else {
-                    errorAction?.let {
+                    errorAction?.let { err ->
                         try {
-                            response.errorBody().use { response ->
-                                val errorJson = response?.string()
+                            response.errorBody()?.use { eb ->
+                                val errorJson = eb.string()
                                 try {
                                     // Looking for correct fault format
                                     val f1 = gson.fromJson(errorJson, Fault::class.java)
                                     val f2 = gson.fromJson(errorJson, FramedFault::class.java)
                                     if (f1.faultCode != null) {
-                                        it("${f1.faultCode} ${f1.faultString}")
+                                        err("${f1.faultCode} ${f1.faultString}")
                                     } else if (f2.fault.faultCode != null) {
-                                        it("${f2.fault.faultCode} ${f2.fault.faultString}")
+                                        err("${f2.fault.faultCode} ${f2.fault.faultString}")
                                     }
-                                } catch (e: JsonSyntaxException) {
-                                    it(errorJson ?: ERROR)
+                                } catch (_: JsonSyntaxException) {
+                                    err(errorJson.ifBlank { ERROR })
                                 }
-                            }
+                            } ?: err(ERROR)
                         } catch (e: IOException) {
                             logError(call, e)
-                            it(ERROR)
+                            err(ERROR)
                         }
                     }
                 }

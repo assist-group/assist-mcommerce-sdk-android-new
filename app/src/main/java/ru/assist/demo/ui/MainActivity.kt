@@ -1,7 +1,6 @@
 package ru.assist.demo.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -10,6 +9,7 @@ import android.widget.EditText
 import com.ekassir.mirpaysdk.client.MirApp
 import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
+import com.google.android.gms.wallet.WalletConstants
 import org.json.JSONObject
 import ru.assist.demo.BuildConfig
 import ru.assist.demo.R
@@ -46,7 +46,7 @@ class MainActivity : BaseActivity() {
     private val defaultLanguage = Language.RU
     private val defaultItems = """
         {"items":[
-        {"id"=1, "name"="Копейка", "quantity"=1, "price"=0.01, "amount"=0.01}
+        {"id":1, "name":"Копейка", "quantity":1, "price":0.01, "amount":0.01}
         ]}
         """.trimIndent()
     private val defaultFirstName = "Ivanka"
@@ -189,7 +189,10 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initGooglePay() {
-        gp = GooglePay(this, isReady = {
+        // Test id (use real one for prod)
+        val googlePayMerchantId = "02510116604241796260"
+        val env = if (BuildConfig.DEBUG) WalletConstants.ENVIRONMENT_TEST else WalletConstants.ENVIRONMENT_PRODUCTION
+        gp = GooglePay(this, env, googlePayMerchantId, isReady = {
             if (it) {
                 binding.btGooglePay.setOnClickListener {
                     val link = binding.etLink.text.toString()
@@ -225,26 +228,27 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initSamsungPay() {
-        sp = object : SamPay(this@MainActivity) {
+        sp = object : SamPay(this@MainActivity, onStatusChanged = { available ->
+            if (available) {
+                binding.btSamsungPay.visibility = View.VISIBLE
+                binding.btSamsungPay.setOnClickListener {
+                    val link = binding.etLink.text.toString()
+                    if (link.isNotBlank()) {
+                        // Для формирования гуглпей-токена необходимы поля заказа:
+                        // amount, orderNumber, merchant_id, currency - которые надо узнать по ссылке
+                        fillFieldsByLink(link, ::startSamsungPay)
+                    } else {
+                        startSamsungPay()
+                    }
+                }
+            } else {
+                binding.btSamsungPay.visibility = View.GONE
+                showToast(R.string.no_samsung_pay)
+            }
+        }) {
             override fun doWithToken(result: String) {
                 payToken(result, PaymentTokenType.SAMSUNG_PAY)
             }
-        }
-
-        if (sp.isAvailable) {
-            binding.btSamsungPay.setOnClickListener {
-                val link = binding.etLink.text.toString()
-                if (link.isNotBlank()) {
-                    // Для формирования гуглпей-токена необходимы поля заказа:
-                    // amount, orderNumber, merchant_id, currency - которые надо узнать по ссылке
-                    fillFieldsByLink(link, ::startSamsungPay)
-                } else {
-                    startSamsungPay()
-                }
-            }
-            binding.btSamsungPay.visibility = View.VISIBLE
-        } else {
-            showToast(R.string.no_samsung_pay)
         }
     }
 
@@ -360,14 +364,15 @@ class MainActivity : BaseActivity() {
 
         val sdk = AssistSDK.getInstance().configure(this, getConfiguration())
         // Прямой вызов через метод
-        sdk.payWeb(this, data, scanner, ::processResult)
+        sdk.payWeb(this, data, scanner, true, ::processResult)
         // Вызов через intent
 //        val intent = sdk.createPayWebIntent(this, data, scanner)
 //        startActivityForResult(intent, assistRequestCode)
     }
 
     private fun payToken(token: String, type: PaymentTokenType) {
-        log("Pay by token=$token, type=$type")
+        val maskedToken = if (token.isEmpty()) "<empty>" else "***"
+        log("Pay by token=$maskedToken, type=$type")
 
         showProgress(true)
 

@@ -191,9 +191,13 @@ internal object Engine {
         api.getAddress("$link&type=json").enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.raw().request.url.toString().contains("pay.cfm")) {
-                    val stream = ByteArrayInputStream(response.body()?.bytes())
-                    val html = BufferedReader(InputStreamReader(stream)).readText()
-                    result(getOrderFromHtml(html))
+                    val bytes = response.body()?.bytes()
+                    if (bytes == null) {
+                        result(AssistResult("Empty response"))
+                    } else {
+                        val html = bytes.inputStream().bufferedReader().use { it.readText() }
+                        result(getOrderFromHtml(html))
+                    }
                 } else {
                     result(AssistResult("Error getting order data"))
                 }

@@ -86,7 +86,7 @@ class PayActivity: AppCompatActivity() {
 
     private fun errorResult(msg: String) {
         setResult(
-            Activity.RESULT_CANCELED,
+            RESULT_CANCELED,
             Intent().putExtra(EXTRA_ASSIST_RESULT, AssistResult(msg))
         )
         finish()
@@ -94,7 +94,7 @@ class PayActivity: AppCompatActivity() {
 
     private fun processResult(result: AssistResult) {
         setResult(
-            Activity.RESULT_OK,
+            RESULT_OK,
             Intent().putExtra(EXTRA_ASSIST_RESULT, result)
         )
         finish()

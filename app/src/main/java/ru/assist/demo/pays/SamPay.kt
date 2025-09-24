@@ -17,7 +17,10 @@ import com.samsung.android.sdk.samsungpay.v2.payment.sheet.AmountConstants
 import com.samsung.android.sdk.samsungpay.v2.payment.sheet.CustomSheet
 import ru.assist.sdk.api.models.AssistPaymentData
 
-abstract class SamPay(private val context: Context) {
+abstract class SamPay(
+    private val context: Context,
+    private val onStatusChanged: (Boolean) -> Unit
+) {
 
     companion object {
         private const val TAG = "SamsungPay"
@@ -31,7 +34,7 @@ abstract class SamPay(private val context: Context) {
 
     private val samsungPay: SamsungPay
 
-    var isAvailable = false
+    private var isAvailable = false
 
     init {
         val bundle = Bundle().apply {
@@ -68,6 +71,7 @@ abstract class SamPay(private val context: Context) {
             }
             else -> Log.w(TAG,"Samsung PAY not expected status")
         }
+        onStatusChanged(isAvailable)
     }
 
     fun startSamsungPay(data: AssistPaymentData) {
